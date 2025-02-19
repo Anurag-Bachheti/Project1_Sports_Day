@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Day Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #log {
+            text-align: left;
+            width: 60%;
+            margin: auto;
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .event {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Sports Day Event</h1>
+    <p>Event progress will be displayed below:</p>
+    <div id="log"></div>
+
+    <script>
+        function displayLog(message) {
+            let logDiv = document.getElementById("log");
+            logDiv.innerHTML += `<p class="event">${message}</p>`;
+        }
+
+        // Opening Ceremony function
+        function OpeningCeremony(callback) {
+            displayLog(" Opening Ceremony started... Welcome to Sports Day!");
+
+            let score = { red: 0, blue: 0, green: 0, yellow: 0 };
+
+            setTimeout(() => {
+                displayLog(" Opening Ceremony finished.");
+                callback(score);
+            }, 1000);
+        }
+
+        // Race 100M function
+        function Race100M(score) {
+            displayLog(" Race 100M is starting in 3 seconds...");
+
+            setTimeout(() => {
+                let times = {
+                    red: (Math.random() * 6 + 10).toFixed(3),
+                    blue: (Math.random() * 6 + 10).toFixed(3),
+                    green: (Math.random() * 6 + 10).toFixed(3),
+                    yellow: (Math.random() * 6 + 10).toFixed(3)
+                };
+                let sorted = Object.keys(times).sort((a, b) => times[a] - times[b]);
+                displayLog(` Race 100M Results: Red: ${times.red}s, Blue: ${times.blue}s, Green: ${times.green}s, Yellow: ${times.yellow}s`);
+                score[sorted[0]] += 50;
+                score[sorted[1]] += 25;
+                displayLog(` Updated Scores: ${JSON.stringify(score)}`);
+
+                LongJump(score);
+            }, 3000);
+        }
+
+        // Long Jump function
+        function LongJump(score) {
+            displayLog(" Long Jump is starting in 2 seconds...");
+
+            setTimeout(() => {
+                let colors = ["red", "blue", "green", "yellow"];
+                let winner = colors[Math.floor(Math.random() * colors.length)];
+                displayLog(` ${winner} team wins Long Jump!`);
+                score[winner] += 150;
+                displayLog(` Updated Scores: ${JSON.stringify(score)}`);
+                HighJump(score);
+            }, 2000);
+        }
+
+        // High Jump function
+        function HighJump(score) {
+            displayLog(" High Jump is starting... Please enter the winner color.");
+
+            setTimeout(() => {
+                let userInput = prompt("Enter the color of the High Jump winner (red, blue, green, yellow):");
+                if (userInput && score.hasOwnProperty(userInput.toLowerCase())) {
+                    score[userInput.toLowerCase()] += 100;
+                    displayLog(` ${userInput} wins the High Jump!`);
+                } else {
+                    displayLog(" No input received or invalid color. No points awarded.");
+                }
+                displayLog(` Updated Scores: ${JSON.stringify(score)}`);
+                AwardCeremony(score);
+            }, 1000);
+        }
+
+        // Award Ceremony function
+        function AwardCeremony(score) {
+            displayLog(" Award Ceremony is starting...");
+
+            let sortedTeams = Object.keys(score).sort((a, b) => score[b] - score[a]);
+
+            displayLog(` 1st Place: ${sortedTeams[0]} with ${score[sortedTeams[0]]} points`);
+            displayLog(` 2nd Place: ${sortedTeams[1]} with ${score[sortedTeams[1]]} points`);
+            displayLog(` 3rd Place: ${sortedTeams[2]} with ${score[sortedTeams[2]]} points`);
+            displayLog(` 4th Place: ${sortedTeams[3]} with ${score[sortedTeams[3]]} points`);
+            displayLog("Award Ceremony is finished...")
+        }
+        OpeningCeremony(Race100M);
+    </script>
+</body>
+</html>
